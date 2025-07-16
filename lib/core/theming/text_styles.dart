@@ -28,4 +28,14 @@ class TextStyles {
     color: ColorManager.white,
     fontWeight: FontWeightHelper.bold,
   );
+  static TextStyle lightGreyAlegreyaSans18Regular = GoogleFonts.alegreyaSans(
+    fontSize: 18.sp,
+    color: ColorManager.lightGrey,
+    fontWeight: FontWeightHelper.regular,
+  );
+  static TextStyle whiteAlegreyaSans18Regular = GoogleFonts.alegreyaSans(
+    fontSize: 18.sp,
+    color: ColorManager.white,
+    fontWeight: FontWeightHelper.regular,
+  );
 }
