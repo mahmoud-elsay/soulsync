@@ -17,7 +17,7 @@ class SoulSync extends StatelessWidget {
             title: 'SoulSync',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              scaffoldBackgroundColor: ColorManager.white,
+              scaffoldBackgroundColor: ColorManager.darkSlate,
               primaryColor: ColorManager.teal,
             ),
             initialRoute: Routes.splashScreen,
