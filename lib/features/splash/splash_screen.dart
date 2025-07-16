@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soulsync/features/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
     );
 
-    // Scale animation: grows from 0.3 to 1.0
     _scaleAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -34,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Fade animation: fades in from 0 to 1
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -42,7 +41,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Rotation animation: subtle 360-degree rotation
     _rotationAnimation = Tween<double>(begin: 0.0, end: 2 * 3.14159).animate(
       CurvedAnimation(
         parent: _controller,
@@ -50,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Pulse animation: slight scale pulse after initial scale
     _pulseAnimation = TweenSequence<double>([
       TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 1.1), weight: 50),
       TweenSequenceItem(tween: Tween<double>(begin: 1.1, end: 1.0), weight: 50),
@@ -63,10 +60,38 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate to the next screen after animation completes
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        context.pushReplacementNamed(Routes.onboardingScreen);
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder:
+                (context, animation, secondaryAnimation) =>
+                    const OnboardingScreen(),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              var fadeTween = Tween<double>(begin: 0.0, end: 1.0);
+              var slideTween = Tween<Offset>(
+                begin: const Offset(0.0, 1.0),
+                end: Offset.zero,
+              );
+              var fadeAnimation = fadeTween.animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+              );
+              var slideAnimation = slideTween.animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+              );
+              return FadeTransition(
+                opacity: fadeAnimation,
+                child: SlideTransition(position: slideAnimation, child: child),
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 500),
+          ),
+        );
       }
     });
   }
@@ -88,25 +113,35 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         child: Center(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Opacity(
-                opacity: _fadeAnimation.value,
-                child: Transform.rotate(
-                  angle: _rotationAnimation.value,
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value * _pulseAnimation.value,
-                    child: child,
-                  ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: Transform.rotate(
+                      angle: _rotationAnimation.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation.value * _pulseAnimation.value,
+                        child: child,
+                      ),
+                    ),
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 200.w,
+                  height: 200.h,
                 ),
-              );
-            },
-            child: Image.asset(
-              'assets/images/logo.png',
-              width: 200.w,
-              height: 200.h,
-            ),
+              ),
+              if (_controller.value > 0.8)
+                const CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+            ],
           ),
         ),
       ),
