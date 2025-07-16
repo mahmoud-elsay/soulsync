@@ -1,7 +1,9 @@
 import 'routes.dart';
 import 'package:flutter/material.dart';
 import 'package:soulsync/features/splash/splash_screen.dart';
+import 'package:soulsync/features/auth/login/ui/login_screen.dart';
 import 'package:soulsync/features/onboarding/onboarding_screen.dart';
+
 
 class AppRouter {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -11,6 +13,8 @@ class AppRouter {
 
       case Routes.onboardingScreen:
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
+        case Routes.loginScreen:
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       default:
         return MaterialPageRoute(
