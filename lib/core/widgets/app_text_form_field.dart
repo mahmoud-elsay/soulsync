@@ -30,23 +30,21 @@ class AppTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: ColorManager.teal,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: contentPadding ??
+        contentPadding:
+            contentPadding ??
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        focusedBorder: focusedBorder ??
+        focusedBorder:
+            focusedBorder ??
             UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorManager.teal,
-                width: 2.0,
-              ),
+              borderSide: BorderSide(color: ColorManager.teal, width: 2.0),
             ),
-        enabledBorder: enabledBorder ??
+        enabledBorder:
+            enabledBorder ??
             UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorManager.lightGrey,
-                width: 1.5,
-              ),
+              borderSide: BorderSide(color: ColorManager.white, width: 1.5),
             ),
         hintStyle: hintStyle ?? TextStyles.lightGreyAlegreyaSans18Regular,
         hintText: hintText,
