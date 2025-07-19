@@ -3,7 +3,6 @@ import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/spacing.dart';
 import 'package:soulsync/core/helpers/extension.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
-import 'package:soulsync/core/theming/color_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soulsync/core/widgets/app_text_button.dart';
 
