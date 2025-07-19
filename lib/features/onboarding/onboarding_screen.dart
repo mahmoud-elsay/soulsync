@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/spacing.dart';
+import 'package:soulsync/core/helpers/extension.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
 import 'package:soulsync/core/theming/color_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,7 +50,9 @@ class OnboardingScreen extends StatelessWidget {
                 AppTextButton(
                   buttonText: 'Login with Email',
                   textStyle: TextStyles.whiteAlegreyaSans25Medium,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pushNamed(Routes.loginScreen);
+                  },
                 ),
                 verticalSpace(16),
                 RichText(
