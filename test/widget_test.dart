@@ -1,4 +1,3 @@
-import 'package:soulsync/main.dart';
 import 'package:flutter/material.dart';
 import 'package:soulsync/soul_sync.dart';
 import 'package:flutter_test/flutter_test.dart';
