@@ -5,7 +5,14 @@ import 'core/theming/color_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SoulSync extends StatelessWidget {
-  const SoulSync({super.key});
+  final String initialRoute;
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const SoulSync({
+    super.key,
+    required this.initialRoute,
+    required this.navigatorKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +21,14 @@ class SoulSync extends StatelessWidget {
       minTextAdapt: true,
       builder:
           (context, child) => MaterialApp(
+            navigatorKey: navigatorKey,
             title: 'SoulSync',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               scaffoldBackgroundColor: ColorManager.darkSlate,
               primaryColor: ColorManager.teal,
             ),
-            initialRoute: Routes.splashScreen,
+            initialRoute: initialRoute,
             onGenerateRoute: AppRouter().generateRoute,
           ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:soulsync/core/routes/routes.dart';
+import 'package:soulsync/core/helpers/extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soulsync/features/onboarding/onboarding_screen.dart';
+import 'package:soulsync/core/helpers/shared_pref_helper.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,6 +23,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+    _controller.forward();
+    _navigateAfterDelay();
+  }
+
+  void _initializeAnimations() {
     _controller = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
@@ -55,42 +64,21 @@ class _SplashScreenState extends State<SplashScreen>
         curve: const Interval(0.7, 1.0, curve: Curves.easeInOut),
       ),
     );
+  }
 
-    _controller.forward();
+  void _navigateAfterDelay() {
+    Future.delayed(const Duration(seconds: 4), () async {
+      if (!mounted) return;
 
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder:
-                (context, animation, secondaryAnimation) =>
-                    const OnboardingScreen(),
-            transitionsBuilder: (
-              context,
-              animation,
-              secondaryAnimation,
-              child,
-            ) {
-              var fadeTween = Tween<double>(begin: 0.0, end: 1.0);
-              var slideTween = Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: Offset.zero,
-              );
-              var fadeAnimation = fadeTween.animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-              );
-              var slideAnimation = slideTween.animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-              );
-              return FadeTransition(
-                opacity: fadeAnimation,
-                child: SlideTransition(position: slideAnimation, child: child),
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
-      }
+      // Mark that user has seen the splash (first time is false now)
+      await SharedPrefHelper.setData(SharedPrefKeys.isFirstTime, false);
+      
+      // Check if user has seen onboarding
+      bool hasSeenOnboarding = await SharedPrefHelper.getBool(SharedPrefKeys.hasSeenOnboarding) ?? false;
+      
+      String nextRoute = hasSeenOnboarding ? Routes.loginScreen : Routes.onboardingScreen;
+
+      context.pushReplacementNamed(nextRoute);
     });
   }
 

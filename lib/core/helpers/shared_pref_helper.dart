@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+class SharedPrefKeys {
+  // Private constructor to prevent instantiation
+  SharedPrefKeys._();
+
+  // Authentication keys
+  static const String isLoggedIn = 'IS_LOGGED_IN';
+  static const String isFirstTime = 'IS_FIRST_TIME';
+  static const String userToken = 'USER_TOKEN';
+  static const String userEmail = 'USER_EMAIL';
+  static const String userId = 'USER_ID';
+  static const String userName = 'USER_NAME';
+
+  // App state keys
+  static const String hasSeenOnboarding = 'HAS_SEEN_ONBOARDING';
+}
+
 class SharedPrefHelper {
   // private constructor as I don't want to allow creating an instance of this class itself.
   SharedPrefHelper._();
