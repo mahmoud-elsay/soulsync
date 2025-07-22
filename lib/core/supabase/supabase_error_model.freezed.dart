@@ -115,8 +115,9 @@ class __$$SupabaseErrorModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SupabaseErrorModelImpl implements _SupabaseErrorModel {
-  const _$SupabaseErrorModelImpl({required this.message, this.statusCode});
+class _$SupabaseErrorModelImpl extends _SupabaseErrorModel {
+  const _$SupabaseErrorModelImpl({required this.message, this.statusCode})
+    : super._();
 
   @override
   final String message;
@@ -153,11 +154,12 @@ class _$SupabaseErrorModelImpl implements _SupabaseErrorModel {
       );
 }
 
-abstract class _SupabaseErrorModel implements SupabaseErrorModel {
+abstract class _SupabaseErrorModel extends SupabaseErrorModel {
   const factory _SupabaseErrorModel({
     required final String message,
     final int? statusCode,
   }) = _$SupabaseErrorModelImpl;
+  const _SupabaseErrorModel._() : super._();
 
   @override
   String get message;
