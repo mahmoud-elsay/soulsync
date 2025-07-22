@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:soulsync/core/helpers/spacing.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soulsync/core/widgets/app_text_button.dart';
 import 'package:soulsync/core/widgets/app_text_form_field.dart';
 

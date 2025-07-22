@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:soulsync/core/routes/routes.dart';
-import 'package:soulsync/core/helpers/extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soulsync/features/onboarding/onboarding_screen.dart';
 
