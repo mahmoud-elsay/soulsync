@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/extension.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soulsync/core/helpers/shared_pref_helper.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -72,14 +72,78 @@ class _SplashScreenState extends State<SplashScreen>
 
       // Mark that user has seen the splash (first time is false now)
       await SharedPrefHelper.setData(SharedPrefKeys.isFirstTime, false);
-      
-      // Check if user has seen onboarding
-      bool hasSeenOnboarding = await SharedPrefHelper.getBool(SharedPrefKeys.hasSeenOnboarding) ?? false;
-      
-      String nextRoute = hasSeenOnboarding ? Routes.loginScreen : Routes.onboardingScreen;
+
+      String nextRoute = await _determineNextRoute();
 
       context.pushReplacementNamed(nextRoute);
     });
+  }
+
+  Future<String> _determineNextRoute() async {
+    try {
+      // Check if user has seen onboarding
+      bool hasSeenOnboarding =
+          await SharedPrefHelper.getBool(SharedPrefKeys.hasSeenOnboarding) ??
+          false;
+
+      if (!hasSeenOnboarding) {
+        return Routes.onboardingScreen;
+      }
+
+      // Check if user is logged in
+      bool isLoggedIn =
+          await SharedPrefHelper.getBool(SharedPrefKeys.isLoggedIn) ?? false;
+
+      if (isLoggedIn) {
+        // Verify we have essential login data
+        String token = await SharedPrefHelper.getSecuredString(
+          SharedPrefKeys.userToken,
+        );
+        String userId = await SharedPrefHelper.getString(SharedPrefKeys.userId);
+
+        if (token.isNotEmpty && userId.isNotEmpty) {
+          debugPrint('User is logged in - navigating to home');
+          return Routes.homeScreen;
+        } else {
+          // Clear invalid login state
+          await _clearAuthData();
+        }
+      }
+
+      // Check Supabase session as fallback
+      final supabase = Supabase.instance.client;
+      final session = supabase.auth.currentSession;
+
+      if (session != null && session.user != null) {
+        // Restore login state from active session
+        await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
+        await SharedPrefHelper.setSecuredString(
+          SharedPrefKeys.userToken,
+          session.accessToken,
+        );
+        await SharedPrefHelper.setData(
+          SharedPrefKeys.userEmail,
+          session.user.email ?? '',
+        );
+        await SharedPrefHelper.setData(SharedPrefKeys.userId, session.user.id);
+
+        debugPrint('Restored session - navigating to home');
+        return Routes.homeScreen;
+      }
+
+      return Routes.loginScreen;
+    } catch (e) {
+      debugPrint('Error determining next route: $e');
+      return Routes.loginScreen;
+    }
+  }
+
+  Future<void> _clearAuthData() async {
+    await SharedPrefHelper.removeData(SharedPrefKeys.isLoggedIn);
+    await SharedPrefHelper.removeData(SharedPrefKeys.userToken);
+    await SharedPrefHelper.removeData(SharedPrefKeys.userEmail);
+    await SharedPrefHelper.removeData(SharedPrefKeys.userId);
+    await SharedPrefHelper.removeData(SharedPrefKeys.userName);
   }
 
   @override

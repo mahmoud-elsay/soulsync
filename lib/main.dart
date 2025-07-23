@@ -32,6 +32,9 @@ Future<String> _determineInitialRoute() async {
     bool isFirstTime =
         await SharedPrefHelper.getBool(SharedPrefKeys.isFirstTime) ?? true;
 
+    debugPrint('=== Route Determination Debug ===');
+    debugPrint('isFirstTime: $isFirstTime');
+
     if (isFirstTime) {
       return Routes.splashScreen;
     }
@@ -41,53 +44,94 @@ Future<String> _determineInitialRoute() async {
         await SharedPrefHelper.getBool(SharedPrefKeys.hasSeenOnboarding) ??
         false;
 
+    debugPrint('hasSeenOnboarding: $hasSeenOnboarding');
+
     if (!hasSeenOnboarding) {
+      debugPrint('User has not seen onboarding - going to onboarding');
       return Routes.onboardingScreen;
     }
 
-    // Check Supabase session
-    final supabase = Supabase.instance.client;
-    final session = supabase.auth.currentSession;
+    // Check stored login state first (this is the key change)
+    bool isLoggedIn =
+        await SharedPrefHelper.getBool(SharedPrefKeys.isLoggedIn) ?? false;
 
-    if (session != null) {
-      // Verify if the session is still valid
-      try {
-        await supabase.auth.getUser();
-        // Session is valid, mark as logged in
-        await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
-        await SharedPrefHelper.setSecuredString(
-          SharedPrefKeys.userToken,
-          session.accessToken,
-        );
-        await SharedPrefHelper.setData(
-          SharedPrefKeys.userEmail,
-          session.user.email ?? '',
-        );
-        await SharedPrefHelper.setData(SharedPrefKeys.userId, session.user.id);
+    debugPrint('isLoggedIn: $isLoggedIn');
 
-        return Routes.homeScreen;
-      } catch (e) {
-        // Session is invalid, clear stored data
+    if (isLoggedIn) {
+      // Check if we have stored user data
+      String token = await SharedPrefHelper.getSecuredString(
+        SharedPrefKeys.userToken,
+      );
+      String userId = await SharedPrefHelper.getString(SharedPrefKeys.userId);
+
+      debugPrint('token.isNotEmpty: ${token.isNotEmpty}');
+      debugPrint('userId.isNotEmpty: ${userId.isNotEmpty}');
+
+      if (token.isNotEmpty && userId.isNotEmpty) {
+        // We have valid stored credentials, try to validate with Supabase
+        final supabase = Supabase.instance.client;
+        final session = supabase.auth.currentSession;
+
+        if (session != null) {
+          // We have both stored data and active session - user is logged in
+          try {
+            // Optional: verify session is still valid (but don't fail if network is down)
+            await supabase.auth.getUser();
+            debugPrint('Session validated successfully');
+          } catch (e) {
+            // Network might be down, but we have valid stored credentials
+            debugPrint(
+              'Session validation failed (possibly network issue): $e',
+            );
+            // Don't clear data here - trust the stored login state
+          }
+          return Routes.homeScreen;
+        } else {
+          // No active session but we have stored login data
+          // This can happen after app restart - trust the stored data
+          debugPrint(
+            'No active session but user has stored login data - keeping logged in',
+          );
+          return Routes.homeScreen;
+        }
+      } else {
+        // Stored login state is true but missing essential data - clear and redirect to login
         await _clearAuthData();
         return Routes.loginScreen;
       }
     }
 
-    // Check stored login state
-    bool isLoggedIn =
-        await SharedPrefHelper.getBool(SharedPrefKeys.isLoggedIn) ?? false;
+    // Check Supabase session as fallback (in case user data wasn't properly stored)
+    final supabase = Supabase.instance.client;
+    final session = supabase.auth.currentSession;
 
-    if (isLoggedIn) {
-      // Check if we have a valid token
-      String token = await SharedPrefHelper.getSecuredString(
-        SharedPrefKeys.userToken,
-      );
-      if (token.isNotEmpty) {
-        return Routes.homeScreen;
-      } else {
-        // No valid token, clear login state
+    if (session != null) {
+      try {
+        // Validate and restore session data
+        final user = await supabase.auth.getUser();
+        if (user.user != null) {
+          // Restore login state
+          await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
+          await SharedPrefHelper.setSecuredString(
+            SharedPrefKeys.userToken,
+            session.accessToken,
+          );
+          await SharedPrefHelper.setData(
+            SharedPrefKeys.userEmail,
+            session.user.email ?? '',
+          );
+          await SharedPrefHelper.setData(
+            SharedPrefKeys.userId,
+            session.user.id,
+          );
+
+          debugPrint('Restored session data from active Supabase session');
+          return Routes.homeScreen;
+        }
+      } catch (e) {
+        // Session is invalid
+        debugPrint('Invalid Supabase session: $e');
         await _clearAuthData();
-        return Routes.loginScreen;
       }
     }
 
@@ -104,4 +148,11 @@ Future<void> _clearAuthData() async {
   await SharedPrefHelper.removeData(SharedPrefKeys.userEmail);
   await SharedPrefHelper.removeData(SharedPrefKeys.userId);
   await SharedPrefHelper.removeData(SharedPrefKeys.userName);
+
+  // Also sign out from Supabase
+  try {
+    await Supabase.instance.client.auth.signOut();
+  } catch (e) {
+    debugPrint('Error signing out from Supabase: $e');
+  }
 }

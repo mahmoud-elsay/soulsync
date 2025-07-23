@@ -39,6 +39,10 @@ class LoginRepo {
   Future<void> _saveUserData(Session session) async {
     try {
       await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
+
+      // Set onboarding as seen since user is now logged in
+      await SharedPrefHelper.setData(SharedPrefKeys.hasSeenOnboarding, true);
+
       await SharedPrefHelper.setSecuredString(
         SharedPrefKeys.userToken,
         session.accessToken,
