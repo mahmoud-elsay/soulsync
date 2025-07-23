@@ -17,6 +17,12 @@ class TextStyles {
     fontWeight: FontWeightHelper.medium,
   );
 
+  static TextStyle whiteAlegreyaSans12Regular = GoogleFonts.alegreyaSans(
+    fontSize: 12.sp,
+    color: ColorManager.white,
+    fontWeight: FontWeightHelper.regular,
+  );
+
   static TextStyle whiteAlegreyaSans25Medium = GoogleFonts.alegreyaSans(
     fontSize: 25.sp,
     color: ColorManager.white,
@@ -28,6 +34,17 @@ class TextStyles {
     color: ColorManager.white,
     fontWeight: FontWeightHelper.bold,
   );
+  static TextStyle whiteAlegreyaSans32Medium = GoogleFonts.alegreyaSans(
+    fontSize: 32.sp,
+    color: ColorManager.white,
+    fontWeight: FontWeightHelper.medium,
+  );
+  static TextStyle whiteWith70OpacityAlegreyaSans22Regular =
+      GoogleFonts.alegreyaSans(
+        fontSize: 22.sp,
+        color: ColorManager.whiteWith70Opacity,
+        fontWeight: FontWeightHelper.regular,
+      );
   static TextStyle lightGreyAlegreyaSans18Regular = GoogleFonts.alegreyaSans(
     fontSize: 18.sp,
     color: ColorManager.lightGrey,

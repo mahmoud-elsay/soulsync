@@ -6,4 +6,6 @@ class ColorManager {
   static const Color lightBlue = Color(0xFF95CBCF);
   static const Color white = Color(0xFFFFFFFF);
   static const Color lightGrey = Color(0xFFBEC2C2);
+  static Color whiteWith70Opacity = Color(0xFFFFFFFF).withValues(alpha: .70);
+  static Color whiteWith90Opacity = Color(0xFFFFFFFF).withValues(alpha: .90);
 }
