@@ -4,10 +4,8 @@ import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/spacing.dart';
 import 'package:soulsync/core/helpers/extension.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:soulsync/core/helpers/app_validation.dart';
 import 'package:soulsync/core/widgets/app_text_button.dart';
-import 'package:soulsync/core/helpers/shared_pref_helper.dart';
 import 'package:soulsync/core/widgets/app_text_form_field.dart';
 import 'package:soulsync/features/auth/login/logic/login_cubit.dart';
 import 'package:soulsync/features/auth/login/logic/login_state.dart';
@@ -40,32 +38,6 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  Future<void> _saveUserData(Session session) async {
-    try {
-      await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
-      await SharedPrefHelper.setSecuredString(
-        SharedPrefKeys.userToken,
-        session.accessToken,
-      );
-      await SharedPrefHelper.setData(
-        SharedPrefKeys.userEmail,
-        session.user.email ?? '',
-      );
-      await SharedPrefHelper.setData(SharedPrefKeys.userId, session.user.id);
-
-      // If user has display name or metadata, save it
-      final userMetadata = session.user.userMetadata;
-      if (userMetadata != null && userMetadata['name'] != null) {
-        await SharedPrefHelper.setData(
-          SharedPrefKeys.userName,
-          userMetadata['name'],
-        );
-      }
-    } catch (e) {
-      debugPrint('Error saving user data: $e');
-    }
-  }
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -80,10 +52,8 @@ class _LoginFormState extends State<LoginForm> {
         state.when(
           initial: () {},
           loading: () {},
-          success: (session) async {
-            // Save user data to SharedPreferences
-            await _saveUserData(session);
-
+          success: (session) {
+            // Session data is already saved in the repository
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
