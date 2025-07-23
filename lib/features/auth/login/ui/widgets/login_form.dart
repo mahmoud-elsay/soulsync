@@ -61,8 +61,8 @@ class _LoginFormState extends State<LoginForm> {
                   backgroundColor: Colors.green,
                 ),
               );
-              // Navigate to home screen
-              context.pushReplacementNamed(Routes.homeScreen);
+
+              context.pushReplacementNamed(Routes.appLayout);
             }
           },
           error: (error) {

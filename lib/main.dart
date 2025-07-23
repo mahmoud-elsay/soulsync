@@ -85,14 +85,14 @@ Future<String> _determineInitialRoute() async {
             );
             // Don't clear data here - trust the stored login state
           }
-          return Routes.homeScreen;
+          return Routes.appLayout;
         } else {
           // No active session but we have stored login data
           // This can happen after app restart - trust the stored data
           debugPrint(
             'No active session but user has stored login data - keeping logged in',
           );
-          return Routes.homeScreen;
+          return Routes.appLayout;
         }
       } else {
         // Stored login state is true but missing essential data - clear and redirect to login

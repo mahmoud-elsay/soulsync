@@ -2,6 +2,7 @@ import 'routes.dart';
 import 'package:flutter/material.dart';
 import 'package:soulsync/core/di/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:soulsync/features/layout/app_layout.dart';
 import 'package:soulsync/features/home/ui/home_screen.dart';
 import 'package:soulsync/features/splash/splash_screen.dart';
 import 'package:soulsync/features/library/ui/library_screen.dart';
@@ -12,7 +13,6 @@ import 'package:soulsync/features/auth/login/logic/login_cubit.dart';
 import 'package:soulsync/features/auth/sign_up/ui/sign_up_screen.dart';
 import 'package:soulsync/features/auth/sign_up/logic/sign_up_cubit.dart';
 import 'package:soulsync/features/meditation_player/ui/meditation_player_screen.dart';
-
 
 class AppRouter {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -49,13 +49,11 @@ class AppRouter {
           builder: (_) => const MeditationPlayerScreen(),
         );
       case Routes.libraryScreen:
-        return MaterialPageRoute(
-          builder: (_) => const LibraryScreen(),
-        );
-        case Routes.profileScreen:
-        return MaterialPageRoute(
-          builder: (_) => const ProfileScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const LibraryScreen());
+      case Routes.profileScreen:
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      case Routes.appLayout:
+        return MaterialPageRoute(builder: (_) => const AppLayout());
 
       default:
         return MaterialPageRoute(
