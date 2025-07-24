@@ -20,53 +20,58 @@ class HomeListViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 221.h,
+      height: 230.h,
       decoration: BoxDecoration(
         color: ColorManager.almond,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Left Side: Texts & Button
+            /// LEFT SIDE (Text + Button)
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(title, style: TextStyles.darkSlateAlegreya32Medium),
                   verticalSpace(8),
-                  Text(subtitle, style: TextStyles.blackAlegreyaSans18Medium),
-                  const Spacer(),
-                  SizedBox(
+                  Text(
+                    subtitle,
+                    style: TextStyles.blackAlegreyaSans18Medium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                  ),
+                  verticalSpace(10),
+                  Container(
                     width: 152.w,
                     height: 42.96.h,
+                    decoration: BoxDecoration(
+                      color: ColorManager.darkSlate,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10.r),
-                      onTap: () {},
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          color: ColorManager.darkSlate,
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'watch now',
-                              style: TextStyles.whiteAlegreyaSans15Medium,
-                            ),
-                            horizontalSpace(6.w),
-                            SvgPicture.asset(
-                              'assets/svgs/small_paly_icon.svg',
-                              width: 14.w,
-                              height: 14.h,
-                            ),
-                          ],
-                        ),
+                      onTap: () {
+                        // TODO: Handle onTap
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'watch now',
+                            style: TextStyles.whiteAlegreyaSans15Medium,
+                          ),
+                          horizontalSpace(8.w),
+                          SvgPicture.asset(
+                            'assets/svgs/small_paly_icon.svg',
+                            width: 16.w,
+                            height: 16.h,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -74,18 +79,22 @@ class HomeListViewItem extends StatelessWidget {
               ),
             ),
 
-            horizontalSpace(16),
+            horizontalSpace(12.w),
 
-            // Right Side: Image
+            /// RIGHT SIDE (Image)
             Expanded(
-              flex: 2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
-                child: Image.asset(
-                  imagePath,
-                  width: 140.w,
-                  height: 190.h,
-                  fit: BoxFit.cover,
+              flex: 5,
+              child: Padding(
+                padding: EdgeInsets.only(right: 4.w),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14.r),
+                  child: Image.asset(
+                    imagePath,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.contain, // ensures image not cropped
+                    filterQuality: FilterQuality.high,
+                  ),
                 ),
               ),
             ),
