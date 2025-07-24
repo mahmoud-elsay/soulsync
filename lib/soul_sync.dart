@@ -1,4 +1,3 @@
-import 'core/routes/routes.dart';
 import 'core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'core/theming/color_manager.dart';

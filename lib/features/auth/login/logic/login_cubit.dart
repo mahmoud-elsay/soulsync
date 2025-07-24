@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soulsync/core/supabase/supabase_result.dart';
 import 'package:soulsync/core/supabase/supabase_error_model.dart';
 import 'package:soulsync/features/auth/login/logic/login_state.dart';
 import 'package:soulsync/features/auth/login/data/repo/login_repo.dart';

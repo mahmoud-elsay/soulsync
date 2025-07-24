@@ -114,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen>
       final supabase = Supabase.instance.client;
       final session = supabase.auth.currentSession;
 
-      if (session != null && session.user != null) {
+      if (session != null) {
         // Restore login state from active session
         await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
         await SharedPrefHelper.setSecuredString(

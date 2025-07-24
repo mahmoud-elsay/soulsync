@@ -3,6 +3,7 @@ import 'package:soulsync/core/helpers/spacing.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
 import 'package:soulsync/core/widgets/app_top_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soulsync/features/home/ui/widgets/meditation_types_row.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,6 +28,8 @@ class HomeScreen extends StatelessWidget {
                 'How are you feeling today ?',
                 style: TextStyles.whiteWith70OpacityAlegreyaSans22Regular,
               ),
+              verticalSpace(24),
+              const MeditationTypesRow(),
               verticalSpace(24),
             ],
           ),
