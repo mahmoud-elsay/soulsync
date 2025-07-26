@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:soulsync/core/routes/routes.dart';
 import 'package:soulsync/core/helpers/spacing.dart';
+import 'package:soulsync/core/helpers/extension.dart';
 import 'package:soulsync/core/theming/text_styles.dart';
 import 'package:soulsync/core/theming/color_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -56,7 +58,7 @@ class HomeListViewItem extends StatelessWidget {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10.r),
                       onTap: () {
-                        // TODO: Handle onTap
+                        context.pushNamed(Routes.meditationPlayer);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

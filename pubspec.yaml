@@ -47,6 +47,9 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   flutter_secure_storage: ^8.0.0
+  just_audio: 0.10.3
+  audio_waveforms: 1.2.0
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:
@@ -77,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
+    - assets/audio/
   
 
   # An image asset can refer to one or more resolution-specific "variants", see
