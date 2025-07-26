@@ -52,15 +52,18 @@ class _LoginFormState extends State<LoginForm> {
         state.when(
           initial: () {},
           loading: () {},
-          success: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login successful!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            
-            context.pushReplacementNamed(Routes.homeScreen);
+          success: (session) {
+            // Session data is already saved in the repository
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Login successful!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+
+              context.pushReplacementNamed(Routes.appLayout);
+            }
           },
           error: (error) {
             ScaffoldMessenger.of(context).showSnackBar(
