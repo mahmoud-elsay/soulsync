@@ -9,6 +9,7 @@ class ColorManager {
   static Color whiteWith70Opacity = Color(0xFFFFFFFF).withValues(alpha: .70);
   static Color whiteWith90Opacity = Color(0xFFFFFFFF).withValues(alpha: .90);
   static const Color black = Color(0xFF000000);
+  static const Color oliveGreen = Color(0xFF3A5051);
 
   static const Color almond = Color(0xFFF7F3F0);
 }
